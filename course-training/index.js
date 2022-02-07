@@ -1,9 +1,7 @@
 
-
-
 //<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
 function generateId() {
-    return Math.random();
+    return  Math.random().toString(36).substring(2);
 }
 /**
  * custom redux store
