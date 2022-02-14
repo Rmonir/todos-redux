@@ -5,6 +5,7 @@ import actionsFactory from '../../actions/actions'
 import {
   CHANGE_COLOR_FILTER,
   DELETE_TODO,
+  SELECT_COLOR,
   TOGGLE_TODO,
 } from '../../actions/actions-types'
 import TodoListItem from './TodoListItem'
@@ -13,8 +14,8 @@ export const TodoList = () => {
   const todos = useSelector((state) => state.todos)
   const dispatch = useDispatch()
 
-  const onColorChange = (e) => {
-    dispatch(actionsFactory(CHANGE_COLOR_FILTER)(e.target.value))
+  const onColorChange = (payload) => {
+    dispatch(actionsFactory(SELECT_COLOR)(payload))
   }
 
   const onCompletedChange = (id) => {
@@ -30,7 +31,9 @@ export const TodoList = () => {
       {todos.map((todo) => (
         <TodoListItem
           key={todo.id}
-          onColorChange={onColorChange}
+          onColorChange={(color) => {
+            onColorChange({ id: todo.id, color: color })
+          }}
           onCompletedChange={() => {
             onCompletedChange(todo.id)
           }}

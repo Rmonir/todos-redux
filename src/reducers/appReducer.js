@@ -4,10 +4,11 @@ import {
   SELECT_COLOR,
   DELETE_TODO,
   COMPLETE_ALL,
-  CLEAR_ALL,
   CHANGE_FILTER_STATUS,
   CHANGE_COLOR_FILTER,
+  CLEAR_COMPLETED,
 } from '../actions/actions-types'
+import StatusFilters from '../components/filters/statusFilters'
 const initialState = {
   todos: [
     { id: 0, text: 'Learn React', completed: true },
@@ -40,25 +41,24 @@ const RootReducer = (state = initialState, action) => {
       }
       break
     case TOGGLE_TODO:
+      let index = state.todos.findIndex((todo) => todo.id === action.payload)
+      state.todos[index].completed = !state.todos[index].completed
       state = {
         ...state,
-        todos: [
-          ...state.todos
-            .filter((todo) => todo.id === action.payload)
-            .map((todo) => (todo.completed = !todo.completed)),
-        ],
+        todos: [...state.todos],
       }
       break
 
     case SELECT_COLOR:
+      let selectedIndex = state.todos.findIndex(
+        (todo) => todo.id === action.payload.id
+      )
+      state.todos[selectedIndex].color = action.payload.color
       state = {
         ...state,
-        todos: [
-          ...state.todos
-            .filter((todo) => todo.id === action.payload)
-            .map((todo) => (todo.color = action.payload.color)),
-        ],
+        todos: [...state.todos],
       }
+
       break
 
     case DELETE_TODO:
@@ -71,20 +71,38 @@ const RootReducer = (state = initialState, action) => {
     case COMPLETE_ALL:
       state = {
         ...state,
-        todos: [...state.todos.map((todo) => (todo.completed = true))],
+        todos: [
+          ...state.todos.map((todo) => {
+            todo.completed = true
+            return todo
+          }),
+        ],
       }
       break
 
-    case CLEAR_ALL:
+    case CLEAR_COMPLETED:
       state = {
         ...state,
-        todos: [],
+        todos: [...state.todos.filter((todo) => todo.completed === false)],
       }
       break
 
     case CHANGE_FILTER_STATUS:
+      let filterdTodos = state.todos
+      switch (action.payload) {
+        case StatusFilters.Active:
+          filterdTodos = state.todos.filter((todo) => todo.completed === false)
+          break
+        case StatusFilters.Completed:
+          filterdTodos = state.todos.filter((todo) => todo.completed === true)
+          break
+        default:
+          break
+      }
+
       state = {
         ...state,
+        todos: [...filterdTodos],
         filters: {
           status: action.payload,
         },

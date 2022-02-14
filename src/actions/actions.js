@@ -4,9 +4,9 @@ import {
   SELECT_COLOR,
   DELETE_TODO,
   COMPLETE_ALL,
-  CLEAR_ALL,
   CHANGE_FILTER_STATUS,
   CHANGE_COLOR_FILTER,
+  CLEAR_COMPLETED,
 } from './actions-types'
 
 const actionsFactory = (action) => {
@@ -29,7 +29,7 @@ const actionsFactory = (action) => {
       }
     case COMPLETE_ALL:
       return { type: 'todos/allCompleted' }
-    case CLEAR_ALL:
+    case CLEAR_COMPLETED:
       return { type: 'todos/completedCleared' }
     case CHANGE_FILTER_STATUS:
       return (payload) => {
