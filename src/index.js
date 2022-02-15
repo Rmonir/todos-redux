@@ -5,6 +5,7 @@ import App from './App'
 import './api/server'
 import store from './store/store'
 import { Provider } from 'react-redux'
+import { loadTodos } from './reducers/todosReducer'
 
 // import actionsFactory from './actions/actions'
 // import {
@@ -47,7 +48,7 @@ import { Provider } from 'react-redux'
 // store.dispatch(actionsFactory(ADD_TODO)('Try creating a store'))
 
 // // Omit existing React rendering logic
-
+store.dispatch(loadTodos)
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

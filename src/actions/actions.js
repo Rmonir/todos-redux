@@ -7,6 +7,7 @@ import {
   CHANGE_FILTER_STATUS,
   CHANGE_COLOR_FILTER,
   CLEAR_COMPLETED,
+  LOADTODOS,
 } from './actions-types'
 
 const actionsFactory = (action) => {
@@ -39,6 +40,13 @@ const actionsFactory = (action) => {
       return (payload) => {
         return {
           type: 'filters/colorFilterChanged',
+          payload: payload,
+        }
+      }
+    case LOADTODOS:
+      return (payload) => {
+        return {
+          type: 'todos/todosLoaded',
           payload: payload,
         }
       }

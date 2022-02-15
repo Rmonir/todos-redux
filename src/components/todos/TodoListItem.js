@@ -1,20 +1,29 @@
 import React from 'react'
 import TimesSolid from './time-solid'
 import { availableColors, capitalize } from '../filters/colors'
-export const TodoListItem = ({
-  todo,
-  onColorChange,
-  onCompletedChange,
-  onDelete,
-}) => {
+import { useDispatch, useSelector } from 'react-redux'
+import actionsFactory from '../../actions/actions'
+import {
+  DELETE_TODO,
+  SELECT_COLOR,
+  TOGGLE_TODO,
+} from '../../actions/actions-types'
+export const TodoListItem = ({ todoId }) => {
+  const todo = useSelector((state) => {
+    return state.todos.find((todo) => todo.id === todoId)
+  })
   const { text, completed, color } = todo
-
-  const handleCompletedChanged = (e) => {
-    onCompletedChange(e.target.value)
+  const dispatch = useDispatch()
+  const onDelete = () => {
+    dispatch(actionsFactory(DELETE_TODO)(todoId))
   }
-
+  const handleCompletedChanged = () => {
+    dispatch(actionsFactory(TOGGLE_TODO)(todoId))
+  }
   const handleColorChanged = (e) => {
-    onColorChange(e.target.value)
+    dispatch(
+      actionsFactory(SELECT_COLOR)({ id: todoId, color: e.target.value })
+    )
   }
 
   const colorOptions = availableColors.map((c) => (

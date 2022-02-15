@@ -8,7 +8,7 @@ const initialState = {
   colors: [''],
 }
 
-const FiltersReducer = (state = initialState, action) => {
+const FiltersReducer = (state = [], action) => {
   switch (action.type) {
     case CHANGE_FILTER_STATUS:
 

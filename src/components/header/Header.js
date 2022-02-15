@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import actionsFactory from '../../actions/actions'
-import { ADD_TODO } from '../../actions/actions-types'
+import { saveNewTodo } from '../../reducers/todosReducer'
 
 export const Header = () => {
   const [text, setText] = useState('')
@@ -12,7 +11,7 @@ export const Header = () => {
   const handleKeyDown = (e) => {
     let trimmedText = e.target.value.trim()
     if (e.key === 'Enter' && trimmedText) {
-      dispatch(actionsFactory(ADD_TODO)(trimmedText))
+      dispatch(saveNewTodo(trimmedText))
       setText('')
     }
   }

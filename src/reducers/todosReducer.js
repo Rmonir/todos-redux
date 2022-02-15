@@ -1,3 +1,4 @@
+import actionsFactory from '../actions/actions'
 import {
   ADD_TODO,
   TOGGLE_TODO,
@@ -5,17 +6,11 @@ import {
   DELETE_TODO,
   COMPLETE_ALL,
   CLEAR_COMPLETED,
+  LOADTODOS,
 } from '../actions/actions-types'
-const initialState = [
-  { id: 0, text: 'Learn React', completed: true },
-  { id: 1, text: 'Learn Redux', completed: false, color: 'purple' },
-  { id: 2, text: 'Build something fun!', completed: false, color: 'blue' },
-]
+import { client } from '../api/client'
 
-// function nextTodoId(todos) {
-//   const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
-//   return maxId + 1
-// }
+const initialState = []
 const TodosReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TODO:
@@ -49,10 +44,25 @@ const TodosReducer = (state = initialState, action) => {
       })
     case CLEAR_COMPLETED:
       return state.filter((todo) => todo.completed === false)
+    case LOADTODOS:
+      return action.payload
     default:
-      break
+      return state
   }
-  return state
+}
+
+export async function loadTodos(dispatch, getState) {
+  const response = await client.get('/fakeApi/todos')
+  dispatch(actionsFactory(LOADTODOS)(response.todos))
+}
+
+export const saveNewTodo = (text) => {
+  return async (dispatch, getState) => {
+    const initialTodo = { text }
+    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+    console.log(response)
+    dispatch(actionsFactory(ADD_TODO)(response.todo))
+  }
 }
 
 export default TodosReducer
